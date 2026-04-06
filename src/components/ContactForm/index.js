@@ -8,24 +8,40 @@ import { Form, ButtonnContainer } from "./styles";
 import FormGroup from "../FormGroup";
 
 export default function ContactForm({ buttonLabel }) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [category, setCategory] = useState('');
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    console.log('enviou');
+  }
+
   return (
-    <Form>
-      <FormGroup>
-        <Input placeholder="Nome" />
+    <Form onSubmit={handleSubmit}>
+      <FormGroup
+        error="Nome é obrigatório"
+      >
+        <Input  placeholder="Nome" error value={name} onChange={(e) => setName(e.target.value)}  />
+      </FormGroup>
+
+      <FormGroup
+        error="O formato do e-mail é inválido"
+      >
+        <Input placeholder="E-mail" error value={email} onChange={(e) => setEmail(e.target.value)} />
+      </FormGroup>
+
+      <FormGroup
+        error="Telefone é obrigatório"
+      >
+        <Input placeholder="Telefone" error value={phone} onChange={(e) => setPhone(e.target.value)} />
       </FormGroup>
 
       <FormGroup>
-        <Input placeholder="E-mail" />
-      </FormGroup>
-
-      <FormGroup>
-        <Input placeholder="Telefone" />
-      </FormGroup>
-
-      <FormGroup>
-        <Select>
+        <Select value={category} onChange={(e) => setCategory(e.target.value)}>
           <option value="instagram">Instagram</option>
-          <option value="linkedin">LinkedIn</option>''
+          <option value="linkedin">LinkedIn</option>''''
           <option value="whatsapp">WhatsApp</option>
         </Select>
       </FormGroup>

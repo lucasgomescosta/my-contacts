@@ -3,12 +3,11 @@ import { Link } from "react-router-dom";
 import setar from "../../assets/images/icons/setar.svg";
 import remove from "../../assets/images/icons/delete.svg";
 import edit from "../../assets/images/icons/edit.svg";
-import Modal from "../../components/Modal";
+import Loader from "../../components/Loader";
 
 export default function Home() {
     return (
        <Container>
-          <Modal danger />
           <InputSearchContainer>
             <input type="text" placeholder="Pesquise pelo nome..." />
           </InputSearchContainer>

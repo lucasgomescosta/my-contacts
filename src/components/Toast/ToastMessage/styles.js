@@ -1,0 +1,36 @@
+import styled, { css } from "styled-components";
+
+const containerVariant = {
+  success: css`
+    background: ${({ theme }) => theme.colors.success.main};
+  `,
+  danger: css`
+    background: ${({ theme }) => theme.colors.danger.main};
+  `,
+  default: css`
+    background: ${({ theme }) => theme.colors.primary.main};
+  `,
+};
+
+
+export const Container = styled.div`
+  padding: 16px 32px;
+  background: ${({ theme }) => theme.colors.primary.main};
+  color: #FFF;
+  border-radius: 4px;
+  box-shadow: 0px 20px 20px -16px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  ${({ type }) => containerVariant[type] || containerVariant.default };
+
+  & + & {
+    margin-top: 12px;
+  }
+
+  img {
+    margin-right: 8px;
+  }
+`;

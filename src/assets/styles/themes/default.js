@@ -17,6 +17,14 @@ export default {
           main: '#FC5050',
           light: '#F97171',
           dark: '#F63131',
-        }
+        },
+        success: {
+          main: "#51ca73",
+          light: "#e6ffed",
+        },
+        warning: {
+          main: "#f6c343",
+          light: "#fff8e1",
+        },
     }
 }

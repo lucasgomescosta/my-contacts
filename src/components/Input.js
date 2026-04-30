@@ -23,6 +23,11 @@ export default styled.input`
 
   ${({ theme, error }) => error && css`
     border-color: ${theme.colors.danger.main} !important;
-    color: ${theme.colors.danger.main};
+  `}
+
+  ${({ disabled }) => disabled && css`
+    background-color: ${({ theme }) => theme.colors.gray[100]};
+    border-color: ${({ theme }) => theme.colors.gray[200]};
+    cursor: not-allowed;
   `}
 `;

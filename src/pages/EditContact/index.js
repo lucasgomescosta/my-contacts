@@ -1,12 +1,27 @@
 import PageHeader from "../../components/PageHeader";
 import ContactForm from "../../components/ContactForm";
 
-export default function EditContact() {
-    return (
-      <>
-        <PageHeader title="Editar contato" />
+import Loader from "../../components/Loader";
+import useEditContact from "./useEditContact";
 
-        <ContactForm buttonLabel="Salvar alterações"/>
-      </>
-    );
+export default function EditContact() {
+  const { isLoading, contactName, contactFormRef, handleSubmit } = useEditContact();
+
+  return (
+    <>
+      <Loader isLoading={isLoading} />
+
+
+      <PageHeader
+        title={isLoading ? 'Carregando...' : `Editar ${contactName}`}
+        backTo={"/"}
+      />
+
+      <ContactForm
+        ref={contactFormRef}
+        buttonLabel="Salvar alterações"
+        onSubmit={handleSubmit}
+      />
+    </>
+  );
 }

@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import Input from "../Input";
 import Select from "../Select";
 import Button from "../Button";
@@ -7,54 +8,100 @@ import PropTypes from "prop-types";
 import { Form, ButtonnContainer } from "./styles";
 import FormGroup from "../FormGroup";
 
-export default function ContactForm({ buttonLabel }) {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [category, setCategory] = useState('');
+import useContactForm from "./useContactForm";
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    console.log('enviou');
-  }
+const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
+
+  const {
+    name,
+    email,
+    phone,
+    categoryId,
+    categories,
+    isLoadingCategories,
+    isSubmitting,
+    getErrorMessageFieldName,
+    isFormValid,
+    handleSubmit,
+    handleNameChange,
+    handleEmailChange,
+    handlePhoneChange,
+    setCategoryId
+  } = useContactForm(ref, onSubmit);
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} noValidate>
       <FormGroup
-        error="Nome é obrigatório"
+        error={getErrorMessageFieldName('name')}
       >
-        <Input  placeholder="Nome" error value={name} onChange={(e) => setName(e.target.value)}  />
+        <Input
+          placeholder="Nome *"
+          error={getErrorMessageFieldName('name')}
+          value={name}
+          onChange={handleNameChange}
+          disabled={isSubmitting}
+        />
       </FormGroup>
 
       <FormGroup
-        error="O formato do e-mail é inválido"
+        error={getErrorMessageFieldName('email')}
       >
-        <Input placeholder="E-mail" error value={email} onChange={(e) => setEmail(e.target.value)} />
+        <Input
+          type="email"
+          placeholder="E-mail *"
+          error={getErrorMessageFieldName('email')}
+          value={email}
+          onChange={handleEmailChange}
+          disabled={isSubmitting}
+        />
       </FormGroup>
 
       <FormGroup
-        error="Telefone é obrigatório"
+        error={getErrorMessageFieldName('phone')}
       >
-        <Input placeholder="Telefone" error value={phone} onChange={(e) => setPhone(e.target.value)} />
+        <Input
+          placeholder="Telefone *"
+          error={getErrorMessageFieldName('phone')}
+          value={phone}
+          onChange={handlePhoneChange}
+          maxLength={15}
+          disabled={isSubmitting}
+        />
       </FormGroup>
 
-      <FormGroup>
-        <Select value={category} onChange={(e) => setCategory(e.target.value)}>
-          <option value="instagram">Instagram</option>
-          <option value="linkedin">LinkedIn</option>''''
-          <option value="whatsapp">WhatsApp</option>
+      <FormGroup
+        error={getErrorMessageFieldName('categoryId')}
+        isLoading={isLoadingCategories}
+      >
+        <Select
+          value={categoryId}
+          onChange={(e) => setCategoryId(e.target.value)}
+          disabled={isLoadingCategories || isSubmitting}
+        >
+          <option value="">Sem Categoria</option>
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>{category.name}</option>
+          ))}
         </Select>
       </FormGroup>
 
       <ButtonnContainer>
-        <Button type="submit">
+        <Button
+          type="submit"
+          disabled={!isFormValid || isSubmitting}
+          isLoading={isSubmitting}
+        >
           {buttonLabel}
         </Button>
       </ButtonnContainer>
     </Form>
   )
-}
+})
+
 
 ContactForm.propTypes = {
   buttonLabel: PropTypes.string.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
+
+export default ContactForm;

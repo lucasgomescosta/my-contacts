@@ -4,22 +4,28 @@ export default function useErrors() {
   const [errors, setErrors] = useState([]);
 
   const setError = useCallback(({ field, message }) => {
-    const errorAlreadyExists = errors.find((error) => error.field === field);
+    setErrors((prevState) => {
+      const errorAlreadyExists = prevState.find((error) => error.field === field);
 
-    if (errorAlreadyExists) {
-      return;
-    }
+      if (errorAlreadyExists) {
+        return prevState;
+      }
 
-    setErrors((prevState) => [...prevState, { field, message }]);
+      return [...prevState, { field, message }];
+    });
+  }, []);
+
+  const removeError = useCallback((field) => {
+    setErrors((prevState) =>
+      prevState.filter((error) => error.field !== field)
+    );
+  }, []);
+
+  const getErrorMessageFieldName = useCallback((fieldName) => {
+    return errors.find(
+      (error) => error.field === fieldName
+    )?.message;
   }, [errors]);
-
-  function removeError(field) {
-    setErrors((prevState) => prevState.filter((error) => error.field !== field));
-  }
-
-  function getErrorMessageFieldName(fieldName) {
-    return errors.find((error) => error.field === fieldName)?.message;
-  }
 
   return {
     errors,

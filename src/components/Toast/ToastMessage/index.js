@@ -1,46 +1,61 @@
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import { Container } from "./styles";
 import PropTypes from "prop-types";
 import checkCircleIcon from '../../../assets/images/icons/check-circle.svg';
 import xCircleIcon from '../../../assets/images/icons/x-circle.svg';
 
-export default function ToastMessage({ text, type, onRemove, id, duration }) {
+function ToastMessage({
+  message,
+  onRemoveMessage,
+  isLeaving,
+  animatedRef
+}) {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      onRemove(id);
-    }, duration || 7000);
+      onRemoveMessage(message.id);
+    }, message.duration || 7000);
     return () => clearTimeout(timeout);
-  }, [onRemove, id, duration]);
+  }, [onRemoveMessage, message.id, message.duration]);
 
   function handleRemoveToast() {
-    onRemove(id);
+    onRemoveMessage(message.id);
   }
+
 
   return (
     <Container
-    type={type}
+    type={message.type}
     onClick={handleRemoveToast}
     tabIndex={0}
     role="button"
+    isLeaving={isLeaving}
+    ref={animatedRef}
     >
-      {type === 'success' && <img src={checkCircleIcon} alt="check" />}
-      {type === 'danger' && <img src={xCircleIcon} alt="X" />}
-      <strong>{text}</strong>
+      {message.type === 'success' && <img src={checkCircleIcon} alt="check" />}
+      {message.type === 'danger' && <img src={xCircleIcon} alt="X" />}
+      <strong>{message.text}</strong>
     </Container>
   )
 }
 
 ToastMessage.propTypes = {
-  text: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['default', 'success', 'danger']),
-  onRemove: PropTypes.func.isRequired,
-  id: PropTypes.number.isRequired,
-  duration: PropTypes.number,
+  onRemoveMessage: PropTypes.func.isRequired,
+  isLeaving: PropTypes.bool.isRequired,
+  message: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    type: PropTypes.string.isRequired,
+    text: PropTypes.string.isRequired,
+    duration: PropTypes.number,
+  }).isRequired,
+  animatedRef: PropTypes.shape().isRequired,
 };
 
 ToastMessage.defaultProps = {
   type: 'default',
 };
+
+export default memo(ToastMessage);
+
 
 

@@ -1,5 +1,5 @@
 import { Container } from "./styles";
-import emptyBox from "../../assets/images/empty-box.svg";
+import emptyBox from "../../../../assets/images/empty-box.svg";
 
 export default function EmptyList() {
     return (

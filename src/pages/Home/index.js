@@ -32,6 +32,8 @@ export default function Home() {
     isLoadingDeleting
   } = useHome();
 
+
+
   const hasContacts = contacts.length > 0;
   const isListEmpty = !hasError && (!isLoading && !hasContacts);
   const isSearchNotFound = !hasError && (hasContacts && filteredContacts.length < 1);

@@ -11,6 +11,11 @@ const handleError = (error) => {
     throw new Error(message);
   }
 
+  // requisição cancelada (AbortController.abort())
+  if (error.name === 'AbortError' || error.name === 'CanceledError' || error.code === 'ERR_CANCELED') {
+    throw error;
+  }
+
   // erro de rede
   throw new APIError('Erro de conexão com o servidor', error);
 };
@@ -20,7 +25,7 @@ export const get = async (url, params = {}, config = {}) => {
   try {
     const response = await apiClient.get(url, {
       params,
-      ...config,
+      ...config
     });
 
     return response.data;

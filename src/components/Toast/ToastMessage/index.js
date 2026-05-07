@@ -29,7 +29,7 @@ function ToastMessage({
     onClick={handleRemoveToast}
     tabIndex={0}
     role="button"
-    isLeaving={isLeaving}
+    $isLeaving={isLeaving}
     ref={animatedRef}
     >
       {message.type === 'success' && <img src={checkCircleIcon} alt="check" />}
@@ -49,10 +49,6 @@ ToastMessage.propTypes = {
     duration: PropTypes.number,
   }).isRequired,
   animatedRef: PropTypes.shape().isRequired,
-};
-
-ToastMessage.defaultProps = {
-  type: 'default',
 };
 
 export default memo(ToastMessage);

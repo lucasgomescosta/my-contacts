@@ -16,13 +16,13 @@ export const Header = styled.header`
 
 export const TitleGroup = styled.div`
   h1 {
-    color: #fff;
+    color: ${({ theme }) => theme.colors.text};
     font-size: 32px;
     margin-bottom: 6px;
   }
 
   span {
-    color: #aaa;
+    color: ${({ theme }) => theme.colors.text};
     font-size: 14px;
   }
 `;
@@ -52,9 +52,10 @@ export const CategoriesList = styled.div`
 
 export const CategoryCard = styled.div`
   width: 100%;
-  padding: 20px 24px;
+  padding: 16px;
   border-radius: 12px;
-  background: #15191c;
+  background-color: ${({ theme }) => theme.colors.background};
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.04);
   border: 1px solid #2a2f35;
 
   display: flex;
@@ -62,6 +63,10 @@ export const CategoryCard = styled.div`
   justify-content: space-between;
 
   transition: 0.2s;
+
+  & + & {
+    margin-top: 16px;
+  }
 
   &:hover {
     border-color: #4f6cff;
@@ -72,10 +77,11 @@ export const CategoryCard = styled.div`
 export const CategoryInfo = styled.div`
   display: flex;
   flex-direction: column;
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 export const CategoryName = styled.strong`
-  color: #fff;
+  color: ${({ theme }) => theme.colors.text};
   font-size: 18px;
   margin-bottom: 4px;
 `;
@@ -101,7 +107,7 @@ export const EditButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    background: #4f6cff;
+    background: #b3bffdff;
     color: #fff;
   }
 `;
@@ -117,7 +123,7 @@ export const DeleteButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    background: #ff5c5c;
+    background: #ffbebeff;
     color: #fff;
   }
 `;

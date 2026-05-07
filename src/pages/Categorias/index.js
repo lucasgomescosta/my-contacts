@@ -39,20 +39,6 @@ export default function Categorias() {
     <Container>
       <Loader isLoading={isLoading} />
 
-
-      <Modal
-        danger
-        visible={isDeleteModalVisible}
-        title={`Tem certeza que deseja remover a categoria "${categoryBeingDeleted?.name}"?`}
-        confirmLabel="Deletar"
-        cancelLabel="Cancelar"
-        onCancel={handleCloseDeleteModal}
-        onConfirm={handleConfirmDeleteCategory}
-        isLoading={isLoadingDeleting}
-      >
-        <p>Este contato será deletado permanentemente</p>
-      </Modal>
-
       <Header>
         <TitleGroup>
           <h1>Categorias</h1>
@@ -99,6 +85,19 @@ export default function Categorias() {
           </CategoryCard>
         ))}
       </CategoriesList>
+
+      <Modal
+        danger
+        visible={isDeleteModalVisible}
+        title={`Tem certeza que deseja remover a categoria "${categoryBeingDeleted?.name}"?`}
+        confirmLabel="Deletar"
+        cancelLabel="Cancelar"
+        onCancel={handleCloseDeleteModal}
+        onConfirm={handleConfirmDeleteCategory}
+        isLoading={isLoadingDeleting}
+      >
+        <p>Esta categoria será deletada permanentemente</p>
+      </Modal>
     </Container>
   );
 }

@@ -1,4 +1,3 @@
-// components/Footer/index.jsx
 import { Container, Content, Left, Right } from "./styles";
 
 export default function Footer() {

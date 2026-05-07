@@ -3,12 +3,12 @@ import { StyledButton } from "./styles";
 import PropTypes from "prop-types";
 
 export default function Button({
-  type,
-  disabled,
-  $isLoading,
+  type = "button",
+  disabled = false,
+  $isLoading = false,
   children,
-  $danger,
-  onClick
+  $danger = false,
+  onClick = undefined
 }) {
   return (
     <StyledButton
@@ -31,12 +31,4 @@ Button.propTypes = {
   $isLoading: PropTypes.bool,
   $danger: PropTypes.bool,
   onClick: PropTypes.func,
-};
-
-Button.defaultProps = {
-  type: "button",
-  disabled: false,
-  $isLoading: false,
-  $danger: false,
-  onClick: undefined,
 };

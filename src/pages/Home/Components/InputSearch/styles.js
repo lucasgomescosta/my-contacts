@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Input = styled.div`
     width: 100%;
-    max-width: 480px;
+    max-width: 680px;
 
     input {
         width: 100%;
@@ -11,8 +11,8 @@ export const Input = styled.div`
         border-radius: 999px;
         padding: 0 24px;
         font-size: 16px;
-        color: #fff;
-        background: #15191c;
+        color: ${({ theme }) => theme.colors.text};
+        background: ${({ theme }) => theme.colors.background};
         box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.25);
         outline: 0;
         transition: 0.2s;

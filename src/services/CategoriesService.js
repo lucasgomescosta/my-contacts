@@ -1,8 +1,8 @@
 import { get, post, put, remove } from '../utils/apiService';
 import CategoryMapper from './mappers/CategoryMapper';
 
-export async function listCategories() {
-  const categories = await get('/categories');
+export async function listCategories(signal) {
+  const categories = await get('/categories', {}, { signal });
   return categories.map(CategoryMapper.toDomain);
 }
 

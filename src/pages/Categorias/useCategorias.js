@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { listCategories, deleteCategory } from "../../services/CategoriesService";
 import toast from "../../utils/toast";
@@ -13,7 +13,7 @@ export default function useCategorias() {
 
   const navigate = useNavigate();
 
-  async function loadCategories() {
+  const loadCategories = useCallback(async () => {
     try {
       setIsLoading(true);
 
@@ -27,20 +27,19 @@ export default function useCategorias() {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, []);
 
   useEffect(() => {
     loadCategories();
-  }, []);
+  }, [loadCategories]);
 
-  function handleDeleteCategory(category) {
+  const handleDeleteCategory = useCallback((category) => {
     setCategoryBeingDeleted(category);
     setIsDeleteModalVisible(true);
-  }
+  }, []);
 
   function handleCloseDeleteModal() {
     setIsDeleteModalVisible(false);
-    setCategoryBeingDeleted(null);
   }
 
   async function handleConfirmDeleteCategory() {

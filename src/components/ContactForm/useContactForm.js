@@ -35,17 +35,26 @@ export default function useContactForm(ref, onSubmit) {
       const isFormValid = (name && errors.length === 0)
 
       useEffect(() => {
+        const controller = new AbortController()
+
         async function loadCategories() {
           try {
-            const response = await listCategories();
+            const response = await listCategories(controller.signal);
             setCategories(response);
           } catch (error) {
+            if (error.name === 'AbortError' || error.name === 'CanceledError') {
+              return;
+            }
             console.log(error);
           } finally {
             setIsLoadingCategories(false);
           }
         }
         loadCategories();
+
+        return () => {
+          controller.abort();
+        }
       }, [setCategories, setIsLoadingCategories]);
 
       async function handleSubmit(event) {

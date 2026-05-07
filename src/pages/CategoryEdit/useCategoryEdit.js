@@ -31,7 +31,7 @@ export default function useCategoryEdit() {
               } catch (error) {
                   console.log(error);
                   safeAsyncAction(() => {
-                      navigate('/');
+                      navigate('/', { replace: true });
                       toast({ type: 'danger', text: 'Categoria não encontrada' });
                   });
               }

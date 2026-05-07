@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 export default function InputSearch({ value, onChange, placeholder }) {
   return (
     <Container>
-      <Input value={value} type="text" placeholder={placeholder} onChange={onChange} />
+      <Input>
+        <input value={value} type="text" placeholder={placeholder} onChange={onChange} />
+      </Input>
     </Container>
   );
 }

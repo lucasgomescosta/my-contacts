@@ -1,22 +1,24 @@
 import { ListHeader, Card, EditButton, DeleteButton } from "./styles";
 import PropTypes from "prop-types";
-import setar from "../../assets/images/icons/setar.svg";
-import edit from "../../assets/images/icons/edit.svg";
-import remove from "../../assets/images/icons/delete.svg";
+import setar from "../../../../assets/images/icons/setar.svg";
+import edit from "../../../../assets/images/icons/edit.svg";
+import remove from "../../../../assets/images/icons/delete.svg";
+import { memo } from "react";
+import { useNavigate } from "react-router-dom";
 
-
-export default function ContactsList({
+function ContactsList({
   filteredContacts,
   onToggleOrderBy,
   orderBy,
-  navigate,
   onDeleteContact
 }) {
-    return (
-      <>
-        <ListHeader $orderBy={orderBy}>
-            {filteredContacts.length > 0 && (
-              <button type="button" onClick={onToggleOrderBy}>
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <ListHeader $orderBy={orderBy}>
+        {filteredContacts.length > 0 && (
+          <button type="button" onClick={onToggleOrderBy}>
                 <span>Nome</span> <img src={setar} alt="seta" />
               </button>
             )}
@@ -67,3 +69,5 @@ ContactsList.propTypes = {
     navigate: PropTypes.func.isRequired,
     onDeleteContact: PropTypes.func.isRequired
 }
+
+export default memo(ContactsList);

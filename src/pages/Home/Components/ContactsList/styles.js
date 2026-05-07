@@ -35,6 +35,8 @@ export const Card = styled.div`
     align-items: center;
     justify-content: space-between;
     border: 1px solid #2a2f35;
+    background-color: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(12px);
 
     transition: 0.2s;
 
@@ -87,7 +89,7 @@ export const EditButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    background: #4f6cff;
+    background: #b3bffdff;
     color: #fff;
   }
 `;
@@ -103,7 +105,7 @@ export const DeleteButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    background: #ff5c5c;
+    background: #ffbebeff;
     color: #fff;
   }
 `;

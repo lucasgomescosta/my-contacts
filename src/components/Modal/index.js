@@ -4,7 +4,17 @@ import PropTypes from "prop-types";
 import ReactPortal from "../ReactPortal";
 import useAnimatedUnmounted from "../../hooks/useAnimatedUnmounted";
 
-export default function Modal({ danger, visible, title, children, cancelLabel, confirmLabel, onCancel, onConfirm, isLoading }) {
+export default function Modal({
+  danger = false,
+  visible,
+  title,
+  children,
+  cancelLabel = 'Cancelar',
+  confirmLabel = 'Confirmar',
+  onCancel,
+  onConfirm,
+  isLoading = false,
+}) {
 
   const { shouldRender, elementRef } = useAnimatedUnmounted(visible);
 
@@ -12,8 +22,8 @@ export default function Modal({ danger, visible, title, children, cancelLabel, c
 
   return (
     <ReactPortal containerId="modal-root">
-      <Overlay isLeaving={!visible} ref={elementRef} >
-        <Container $danger={danger} isLeaving={!visible}>
+      <Overlay $isLeaving={!visible} ref={elementRef} >
+        <Container $danger={danger} $isLeaving={!visible}>
           <h1>{title}</h1>
 
           <div className="modal-body">
@@ -55,11 +65,4 @@ Modal.propTypes = {
   onConfirm: PropTypes.func.isRequired,
   visible: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool,
-}
-
-Modal.defaultProps = {
-  danger: false,
-  cancelLabel: 'Cancelar',
-  confirmLabel: 'Confirmar',
-  isLoading: false,
 }

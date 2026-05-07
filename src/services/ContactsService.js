@@ -1,14 +1,14 @@
 import { get, post, put, remove } from '../utils/apiService';
 import ContactMapper from '../services/mappers/ContactMapper';
 
-export async function getContactById(id) {
-  const contact = await get(`/contacts/${id}`);
+export async function getContactById(id, signal) {
+  const contact = await get(`/contacts/${id}`, {}, { signal });
 
   return ContactMapper.toDomain(contact);
 }
 
-export async function listContacts(orderBy = 'asc') {
-  const contacts = await get('/contacts', { orderBy });
+export async function listContacts(orderBy = 'asc', signal) {
+  const contacts = await get('/contacts', { orderBy }, { signal });
 
   return contacts.map(ContactMapper.toDomain);
 }

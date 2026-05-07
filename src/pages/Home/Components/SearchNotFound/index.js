@@ -1,15 +1,15 @@
-import { SearchNotFoundContainer } from "./styles";
+import { Container } from "./styles";
 import PropTypes from 'prop-types';
-import magnifierQuestion from "../../assets/images/magnifier-question.svg";
+import magnifierQuestion from "../../../../assets/images/magnifier-question.svg";
 
 export default function SearchNotFound({ searchTerm }) {
     return (
-        <SearchNotFoundContainer>
+        <Container>
               <img src={magnifierQuestion} alt="magnifier question" />
               <span>
                 Nenhum resultado foi encontrado para a busca <strong>{`"${searchTerm}"`}</strong>
               </span>
-        </SearchNotFoundContainer>
+        </Container>
     )
 }
 

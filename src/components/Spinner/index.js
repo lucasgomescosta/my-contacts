@@ -1,7 +1,7 @@
 import { StyledSppiner } from "./styles";
 import PropTypes from "prop-types";
 
-export default function Spinner({ size }) {
+export default function Spinner({ size = 32 }) {
   return (
     <StyledSppiner size={size} />
   )
@@ -9,8 +9,4 @@ export default function Spinner({ size }) {
 
 Spinner.propTypes = {
   size: PropTypes.number,
-};
-
-Spinner.defaultProps = {
-  size: 32,
 };

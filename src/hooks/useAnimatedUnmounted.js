@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useRef, useState } from "react";
 
-export default function useAnimatedUnmounted({ visible }) {
+export default function useAnimatedUnmounted(visible) {
 
   const [shouldRender, setShouldRender] = useState(visible);
   const elementRef = useRef(null);

@@ -33,10 +33,8 @@ export const Container = styled.header`
 export const AddContactButton = styled(Link)`
   height: 44px;
   padding: 0 20px;
-  border-radius: 8px;
-  background: #4f6cff;
-  color: #fff;
-  font-weight: 700;
+  border-radius: 8pxs;
+  font-weight: bold;
   text-decoration: none;
 
   display: flex;

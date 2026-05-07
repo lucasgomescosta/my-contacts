@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useDeferredValue, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { listContacts, deleteContact } from "../../services/ContactsService";
 import toast from "../../utils/toast";
@@ -6,27 +6,35 @@ import toast from "../../utils/toast";
 export default function useHome() {
   const [contacts, setContacts] = useState([]);
   const [orderBy, setOrderBy] = useState('asc');
-  const [searchTerm, setSearchTerm] = useState('');
+
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [contactBeingDeleted, setContactBeingDeleted] = useState(null);
-  const [isLoadingDeleting, setIsLoadingDeleting] = useState(false);
+  const [isLoadingDeleting, setIsLoadingDeleting] = useState(false)
+
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const deferredSearchTerm = useDeferredValue(searchTerm);
 
   const navigate = useNavigate();
 
   const filteredContacts = useMemo(() => {
-    return contacts.filter((contact) => contact.name.toLowerCase().includes(searchTerm.toLowerCase()));
-  }, [contacts, searchTerm]);
+    return contacts.filter((contact) => contact.name.toLowerCase().includes(deferredSearchTerm.toLowerCase()));
+  }, [contacts, deferredSearchTerm]);
 
-  const loadContacts = useCallback(async () => {
+  const loadContacts = useCallback(async (signal) => {
     setIsLoading(true);
     try {
-      const response = await listContacts(orderBy);
+      const response = await listContacts(orderBy, signal);
 
       setHasError(false);
       setContacts(response);
-    } catch {
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        return;
+      }
+
       setHasError(true);
       setContacts([]);
     } finally {
@@ -35,20 +43,26 @@ export default function useHome() {
   }, [orderBy]);
 
   useEffect(() => {
-    loadContacts();
+    const controller = new AbortController();
+    loadContacts(controller.signal);
+
+    return () => {
+      controller.abort();
+    }
   }, [loadContacts]);
 
-  function handleToggleOrderBy() {
+  const handleToggleOrderBy = useCallback(() => {
     setOrderBy((prevState) => (prevState === 'asc' ? 'desc' : 'asc'));
-  }
+  }, []);
 
-  function handleDeleteContact(contact) {
+  const handleDeleteContact = useCallback((contact) => {
     setContactBeingDeleted(contact);
     setIsDeleteModalVisible(true);
-  }
+  }, []);
 
   function handleChangeSearchTerm(e) {
-    setSearchTerm(e.target.value);
+    const { value } = e.target;
+    setSearchTerm(value);
   }
 
   function handleTryAgain() {

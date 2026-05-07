@@ -1,4 +1,3 @@
-// components/Header/index.jsx
 import { NavLink } from "react-router-dom";
 import {
   Container,

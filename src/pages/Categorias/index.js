@@ -11,6 +11,9 @@ import {
   EditButton,
   DeleteButton,
   EmptyMessage,
+  Pagination,
+  PaginationButton,
+  PageButton,
 } from "./styles";
 
 
@@ -25,6 +28,10 @@ export default function Categorias() {
 
   const {
     categories,
+    total,
+    page,
+    totalPages,
+    pages,
     isLoading,
     isDeleteModalVisible,
     categoryBeingDeleted,
@@ -32,6 +39,9 @@ export default function Categorias() {
     handleCloseDeleteModal,
     handleConfirmDeleteCategory,
     handleDeleteCategory,
+    handlePrevPage,
+    handleNextPage,
+    handleGoToPage,
     navigate,
   } = useCategorias();
 
@@ -45,7 +55,7 @@ export default function Categorias() {
           <span>
             {isLoading
               ? "Carregando..."
-              : `${categories.length} categoria(s) cadastrada(s)`}
+              : `${total} categoria(s) cadastrada(s)`}
           </span>
         </TitleGroup>
 
@@ -85,6 +95,34 @@ export default function Categorias() {
           </CategoryCard>
         ))}
       </CategoriesList>
+
+      {totalPages >= 1 && (
+        <Pagination>
+          <PaginationButton type="button" onClick={handlePrevPage} disabled={page === 1}>
+            &lsaquo; Anterior
+          </PaginationButton>
+
+          {pages.map((p, i) =>
+            p === '...'
+              ? <span key={`ellipsis-${i}`}>...</span>
+              : (
+                <PageButton
+                  key={p}
+                  type="button"
+                  $active={p === page}
+                  disabled={p === page}
+                  onClick={() => handleGoToPage(p)}
+                >
+                  {p}
+                </PageButton>
+              )
+          )}
+
+          <PaginationButton type="button" onClick={handleNextPage} disabled={page === totalPages}>
+            Próxima &rsaquo;
+          </PaginationButton>
+        </Pagination>
+      )}
 
       <Modal
         danger

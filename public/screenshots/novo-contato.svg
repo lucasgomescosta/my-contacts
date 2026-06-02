@@ -1,0 +1,17 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img"
+  aria-label="Novo Contato Screenshot Placeholder">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#bg)" />
+  <rect x="280" y="90" width="720" height="540" rx="18" fill="#ffffff" opacity="0.1" />
+  <text x="640" y="330" text-anchor="middle" fill="#eff6ff" font-family="Arial, sans-serif"
+    font-size="42" font-weight="700">Tela Novo Contato</text>
+  <text x="640" y="380" text-anchor="middle" fill="#dbeafe" font-family="Arial, sans-serif"
+    font-size="24">Substitua por screenshot real</text>
+  <text x="640" y="660" text-anchor="middle" fill="#bfdbfe" font-family="Arial, sans-serif"
+    font-size="18">public/screenshots/novo-contato.svg</text>
+</svg>

@@ -1,10 +1,32 @@
 import { useRef } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createCategory, getCategoryByName } from "../../services/CategoriesService";
 import toast from "../../utils/toast";
 
 export default function useCategoryNew() {
 
     const categoryFormRef = useRef(null);
+    const queryClient = useQueryClient();
+
+    const createMutation = useMutation({
+      mutationFn: (category) => createCategory(category),
+      onSuccess: () => {
+        categoryFormRef.current.resetFields();
+        queryClient.invalidateQueries({ queryKey: ['categories'] });
+
+        toast({
+          type: "success",
+          text: "Categoria cadastrada com sucesso",
+        });
+      },
+      onError: (error) => {
+        console.log(error);
+        toast({
+          type: "danger",
+          text: "Erro ao cadastrar categoria",
+        });
+      },
+    });
 
   async function handleSubmit(formData) {
     try {
@@ -22,14 +44,7 @@ export default function useCategoryNew() {
         return;
       }
 
-      await createCategory(category);
-
-      categoryFormRef.current.resetFields();
-
-      toast({
-        type: "success",
-        text: "Categoria cadastrada com sucesso",
-      });
+      createMutation.mutate(category);
     } catch (error) {
       console.log(error);
       toast({

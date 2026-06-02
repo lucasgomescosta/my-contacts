@@ -134,3 +134,50 @@ export const EmptyMessage = styled.p`
   text-align: center;
   margin-top: 64px;
 `;
+
+export const Pagination = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 32px;
+`;
+
+export const PaginationButton = styled.button`
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 6px;
+  border: 1px solid #4f6cff;
+  background: transparent;
+  color: #4f6cff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  &:not(:disabled):hover {
+    background: #4f6cff;
+    color: #fff;
+  }
+`;
+
+export const PageButton = styled.button`
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  border: 1px solid ${({ $active }) => $active ? '#4f6cff' : 'transparent'};
+  background: ${({ $active }) => $active ? '#4f6cff' : 'transparent'};
+  color: ${({ $active, theme }) => $active ? '#fff' : theme.colors.text};
+  font-weight: ${({ $active }) => $active ? 700 : 400};
+  cursor: ${({ $active }) => $active ? 'default' : 'pointer'};
+  transition: 0.2s;
+
+  &:not(:disabled):hover {
+    border-color: #4f6cff;
+    color: ${({ $active }) => $active ? '#fff' : '#4f6cff'};
+  }
+`;

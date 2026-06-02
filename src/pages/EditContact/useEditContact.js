@@ -1,54 +1,48 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-import useSafeAsyncAction from "../../hooks/useSafeAsyncAction";
 import { getContactById, updateContact } from "../../services/ContactsService";
 import toast from "../../utils/toast";
 
 export default function useEditContact() {
-  const [isLoading, setIsLoading] = useState(true);
   const contactFormRef = useRef(null);
-  const [contactName, setContactName] = useState('');
 
   const { id } = useParams();
   const navigate = useNavigate();
-  const safeAsyncAction = useSafeAsyncAction();
+  const queryClient = useQueryClient();
+
+  const { isLoading, data: contactData, isError } = useQuery({
+    queryKey: ['contact', id],
+    queryFn: () => getContactById(id),
+  });
 
   useEffect(() => {
-    const controller = new AbortController();
-    async function loadContact() {
-
-
-      try {
-        const contactData = await getContactById(id, controller.signal);
-        safeAsyncAction(() => {
-          contactFormRef.current.setFieldsValue(contactData);
-          setContactName(contactData.name);
-          setIsLoading(false);
-        })
-
-      } catch (error) {
-        if (!((error instanceof DOMException && error.name === 'AbortError') || (error.name === 'CanceledError'))) {
-          safeAsyncAction(() => {
-          navigate('/', { replace: true });
-          toast({ type: 'danger', text: 'Contato não encontrado' });
-        });
-        }
-      }
+    if (isError) {
+      navigate('/', { replace: true });
+      toast({ type: 'danger', text: 'Contato não encontrado' });
     }
+  }, [isError, navigate]);
 
-    loadContact();
-
-    return () => {
-      controller.abort();
+  useEffect(() => {
+    if (contactData && contactFormRef.current) {
+      contactFormRef.current.setFieldsValue(contactData);
     }
-  }, [id, navigate, safeAsyncAction]);
+  }, [contactData]);
 
-  async function handleSubmit(contactData) {
+  const contactName = contactData?.name ?? '';
+
+  async function handleSubmit(contact) {
     try {
+      const payload = { ...contact };
+      if (payload.email === contactData?.email) {
+        delete payload.email;
+      }
 
-      await updateContact(id, contactData);
-      setContactName(contactData.name);
+      await updateContact(id, payload);
+
+      queryClient.invalidateQueries({ queryKey: ['contacts'] });
+      queryClient.invalidateQueries({ queryKey: ['contact', id] });
 
       toast({ type: 'success', text: 'Contato atualizado com sucesso' });
     } catch (error) {
@@ -62,5 +56,5 @@ export default function useEditContact() {
     contactName,
     contactFormRef,
     handleSubmit,
-    };
+  };
 }

@@ -1,0 +1,17 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img"
+  aria-label="Categorias Screenshot Placeholder">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#134e4a" />
+      <stop offset="100%" stop-color="#0f766e" />
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#bg)" />
+  <rect x="72" y="72" width="1136" height="576" rx="16" fill="#ffffff" opacity="0.1" />
+  <text x="640" y="340" text-anchor="middle" fill="#f0fdfa" font-family="Arial, sans-serif"
+    font-size="42" font-weight="700">Tela Categorias</text>
+  <text x="640" y="390" text-anchor="middle" fill="#ccfbf1" font-family="Arial, sans-serif"
+    font-size="24">Substitua por screenshot real</text>
+  <text x="640" y="660" text-anchor="middle" fill="#99f6e4" font-family="Arial, sans-serif"
+    font-size="18">public/screenshots/categorias.svg</text>
+</svg>

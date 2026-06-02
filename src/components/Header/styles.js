@@ -123,3 +123,19 @@ export const UserRole = styled.span`
   color: #94a3b8;
   font-size: 12px;
 `;
+
+export const ActionButton = styled.button`
+  border: 0;
+  background: rgba(239, 68, 68, 0.18);
+  color: #fecaca;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  &:hover {
+    background: rgba(239, 68, 68, 0.3);
+    color: #fff;
+  }
+`;

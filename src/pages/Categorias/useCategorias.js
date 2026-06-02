@@ -1,37 +1,75 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { listCategories, deleteCategory } from "../../services/CategoriesService";
 import toast from "../../utils/toast";
+import usePagination from "../../hooks/usePagination";
+
+const PAGE_SIZE = 10;
 
 export default function useCategorias() {
-  const [categories, setCategories] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [categoryBeingDeleted, setCategoryBeingDeleted] = useState(null);
-  const [isLoadingDeleting, setIsLoadingDeleting] = useState(false);
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  const loadCategories = useCallback(async () => {
-    try {
-      setIsLoading(true);
+  const {
+    page,
+    setPage,
+    setTotalPages,
+    pages,
+    handlePrevPage,
+    handleNextPage,
+    handleGoToPage,
+  } = usePagination();
 
-      const data = await listCategories();
-      setCategories(data);
-    } catch {
-      toast({
-        type: "danger",
-        text: "Erro ao listar categorias",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  const {
+    data,
+    isLoading,
+  } = useQuery({
+    queryKey: ['categories', page],
+    queryFn: () => listCategories({ page, pageSize: PAGE_SIZE }),
+    placeholderData: (prev) => prev,
+  });
+
+  const categories = useMemo(() => data?.categories ?? [], [data?.categories]);
+  const totalPages = data?.pagination?.totalPages ?? 1;
+  const total = data?.pagination?.total ?? 0;
 
   useEffect(() => {
-    loadCategories();
-  }, [loadCategories]);
+    setTotalPages(totalPages);
+  }, [totalPages, setTotalPages]);
+
+  useEffect(() => {
+    if (page < totalPages) {
+      queryClient.prefetchQuery({
+        queryKey: ['categories', page + 1],
+        queryFn: () => listCategories({ page: page + 1, pageSize: PAGE_SIZE }),
+      });
+    }
+  }, [page, totalPages, queryClient]);
+
+  const deleteMutation = useMutation({
+    mutationFn: (categoryId) => deleteCategory(categoryId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['categories'] });
+      handleCloseDeleteModal();
+      if (categories.length === 1 && page > 1) {
+        setPage((p) => p - 1);
+      }
+      toast({
+        type: 'success',
+        text: 'Categoria deletada com sucesso!',
+      });
+    },
+    onError: () => {
+      toast({
+        type: 'danger',
+        text: 'Erro ao deletar categoria!',
+      });
+    },
+  });
 
   const handleDeleteCategory = useCallback((category) => {
     setCategoryBeingDeleted(category);
@@ -42,41 +80,26 @@ export default function useCategorias() {
     setIsDeleteModalVisible(false);
   }
 
-  async function handleConfirmDeleteCategory() {
-      try {
-        setIsLoadingDeleting(true);
-
-        await deleteCategory(categoryBeingDeleted.id);
-
-        setCategories(prevState => prevState.filter(
-          (category) => category.id !== categoryBeingDeleted.id
-        ));
-
-        handleCloseDeleteModal();
-
-        toast({
-          type: 'success',
-          text: 'Categoria deletada com sucesso!',
-        });
-      } catch {
-        toast({
-          type: 'danger',
-          text: 'Erro ao deletar categoria!',
-        });
-      } finally {
-        setIsLoadingDeleting(false);
-      }
-    }
+  function handleConfirmDeleteCategory() {
+    deleteMutation.mutate(categoryBeingDeleted.id);
+  }
 
   return {
     categories,
+    total,
+    page,
+    totalPages,
     isLoading,
     isDeleteModalVisible,
     categoryBeingDeleted,
-    isLoadingDeleting,
+    isLoadingDeleting: deleteMutation.isPending,
     handleCloseDeleteModal,
     handleConfirmDeleteCategory,
     handleDeleteCategory,
+    pages,
+    handlePrevPage,
+    handleNextPage,
+    handleGoToPage,
     navigate,
   }
 }

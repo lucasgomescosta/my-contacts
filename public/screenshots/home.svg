@@ -1,0 +1,17 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img"
+  aria-label="Home Screenshot Placeholder">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#bg)" />
+  <rect x="72" y="72" width="1136" height="576" rx="16" fill="#ffffff" opacity="0.08" />
+  <text x="640" y="340" text-anchor="middle" fill="#e2e8f0" font-family="Arial, sans-serif"
+    font-size="44" font-weight="700">Tela Home</text>
+  <text x="640" y="390" text-anchor="middle" fill="#cbd5e1" font-family="Arial, sans-serif"
+    font-size="24">Substitua por screenshot real</text>
+  <text x="640" y="660" text-anchor="middle" fill="#94a3b8" font-family="Arial, sans-serif"
+    font-size="18">public/screenshots/home.svg</text>
+</svg>

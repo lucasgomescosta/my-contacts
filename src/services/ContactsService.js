@@ -7,10 +7,20 @@ export async function getContactById(id, signal) {
   return ContactMapper.toDomain(contact);
 }
 
-export async function listContacts(orderBy = 'asc', signal) {
-  const contacts = await get('/contacts', { orderBy }, { signal });
+export async function listContacts({ page = 1, pageSize = 10, orderBy = 'asc' } = {}) {
+  const response = await get('/contacts', { page, pageSize, orderBy });
 
-  return contacts.map(ContactMapper.toDomain);
+  if (Array.isArray(response)) {
+    return {
+      contacts: response.map(ContactMapper.toDomain),
+      pagination: { page: 1, pageSize: response.length, total: response.length, totalPages: 1 },
+    };
+  }
+
+  return {
+    contacts: (response.data ?? []).map(ContactMapper.toDomain),
+    pagination: response.pagination ?? { page, pageSize, total: 0, totalPages: 1 },
+  };
 }
 
 export function createContact(contact) {

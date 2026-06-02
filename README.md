@@ -1,75 +1,161 @@
-# Getting Started with Create React App
+# MyContacts Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Aplicacao frontend para gerenciamento de contatos e categorias, com autenticacao, paginacao, busca e feedback visual via toasts.
 
-## Available Scripts
+## Visao Geral
 
-In the project directory, you can run:
+O projeto foi construido com React e adota uma arquitetura modular baseada em:
 
-### `npm start`
+- `pages`: composicao de telas
+- `components`: componentes reutilizaveis e formularios
+- `hooks`: logica de estado e efeitos
+- `services`: integracao com API
+- `contexts`: autenticacao e estado global
+- `utils`: utilitarios (validacoes, formatacoes, chamadas HTTP)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Stack Tecnica
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- React 19
+- React Router DOM 7
+- React Query (TanStack Query) 5
+- Styled Components 6
+- Axios
+- ESLint
+- Create React App (react-scripts)
 
-### `npm test`
+## Requisitos
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js 18+
+- npm 9+
 
-### `npm run build`
+## Configuracao de Ambiente
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Arquivo `.env`:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```env
+DISABLE_ESLINT_PLUGIN=true
+REACT_APP_API_URL=http://localhost:3001
+WDS_SOCKET_PORT=0
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Variaveis principais:
 
-### `npm run eject`
+- `REACT_APP_API_URL`: URL base da API backend
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Como Executar
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. Instale dependencias:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+npm install
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+2. Inicie o projeto em desenvolvimento:
 
-## Learn More
+```bash
+npm start
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+3. Acesse no navegador:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+`http://localhost:3000`
 
-### Code Splitting
+## Scripts Disponiveis
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- `npm start`: inicia a aplicacao em modo desenvolvimento
+- `npm run build`: gera build de producao em `build/`
+- `npm test`: executa os testes
+- `npm run eject`: expoe configuracoes do CRA (irreversivel)
 
-### Analyzing the Bundle Size
+## Autenticacao
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Fluxo implementado:
 
-### Making a Progressive Web App
+- Cadastro: `POST /auth/signup`
+- Login: `POST /auth/signin`
+- Refresh token: `POST /refresh-token`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Tokens e dados de sessao sao persistidos no `localStorage` via chaves em `src/config/storageKeys.js`.
 
-### Advanced Configuration
+O `AuthContext`:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- injeta `Authorization: Bearer <token>` nas requisicoes autenticadas
+- ignora header de autorizacao em rotas publicas de auth (`/auth/*`)
+- tenta renovar sessao em respostas `401` quando houver refresh token valido
 
-### Deployment
+## Estrutura de Pastas (Resumo)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```text
+src/
+	components/
+	contexts/
+	hooks/
+	pages/
+	services/
+	utils/
+```
 
-### `npm run build` fails to minify
+## Screenshots
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+A pasta `public/screenshots` contem imagens de exemplo para deixar o README mais visual.
+Substitua os arquivos pelos screenshots reais sem mudar os nomes, assim os links abaixo continuam funcionando.
 
+### Home
 
-### `ESLINT` ###
+![Home](public/screenshots/home.PNG)
 
-Comando pra iniciar eslint: yarn eslint --init
+### Sign In
+
+![Sign In](public/screenshots/sign-in.PNG)
+
+### Sign Up
+
+![Sign Up](public/screenshots/sign-up.PNG)
+
+### Categorias
+
+![Categorias](public/screenshots/categorias.PNG)
+
+### Novo Contato
+
+![Novo Contato](public/screenshots/novo-contato.PNG)
+
+## Qualidade e Padroes
+
+- Logica de formularios centralizada em hooks (`use...`)
+- UI desacoplada em componentes de formulario reutilizaveis
+- Validacoes por campo usando `useErrors`
+- Comunicacao com API isolada em `services` e `utils/apiService`
+
+## Infra Local (Opcional)
+
+Existe `docker-compose.yml` com PostgreSQL para ambiente local:
+
+```bash
+docker compose up -d
+```
+
+Observacao: o frontend depende de uma API em `http://localhost:3001`.
+
+## Troubleshooting
+
+- Erro `401 Unauthorized` no cadastro/login:
+  - confirme se os endpoints da API de auth estao ativos
+  - limpe `localStorage` do navegador para remover tokens antigos
+  - verifique `REACT_APP_API_URL`
+
+- CORS no navegador:
+  - habilite o frontend (`http://localhost:3000`) no backend
+
+- Porta em uso:
+  - altere a porta da API ou encerre o processo conflitando
+
+## Contribuicao
+
+1. Crie uma branch de feature
+2. Faça commits pequenos e descritivos
+3. Abra PR com contexto da alteracao, impacto e como testar
+
+## Licenca
+
+Definir conforme a politica do repositorio.

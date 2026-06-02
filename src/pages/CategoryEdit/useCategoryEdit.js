@@ -1,84 +1,83 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-import useSafeAsyncAction from "../../hooks/useSafeAsyncAction";
 import toast from "../../utils/toast";
 import {
-    getCategoryById,
-    updateCategory,
-    getCategoryByName
+  getCategoryById,
+  updateCategory,
+  getCategoryByName
 } from "../../services/CategoriesService";
 
 export default function useCategoryEdit() {
 
   const { id } = useParams();
-      const navigate = useNavigate();
-      const safeAsyncAction = useSafeAsyncAction();
-      const categoryFormRef = useRef(null);
+  const navigate = useNavigate();
+  const categoryFormRef = useRef(null);
+  const queryClient = useQueryClient();
 
-      const [isLoading, setIsLoading] = useState(true);
-      const [categoryName, setCategoryName] = useState('');
+  const { isLoading, data: categoryData, isError } = useQuery({
+    queryKey: ['category', id],
+    queryFn: () => getCategoryById(id),
+  });
 
-      useEffect(() => {
-          async function loadCategory() {
-              try {
-                  const category = await getCategoryById(id);
-                  safeAsyncAction(() => {
-                      setCategoryName(category.name);
-                      categoryFormRef.current.setFieldsValue({ name: category.name });
-                      setIsLoading(false);
-                  });
-              } catch (error) {
-                  console.log(error);
-                  safeAsyncAction(() => {
-                      navigate('/', { replace: true });
-                      toast({ type: 'danger', text: 'Categoria não encontrada' });
-                  });
-              }
-          }
-          loadCategory();
-      }, [id, navigate, safeAsyncAction]);
+  useEffect(() => {
+    if (isError) {
+      navigate('/', { replace: true });
+      toast({ type: 'danger', text: 'Categoria não encontrada' });
+    }
+  }, [isError, navigate]);
 
-      async function handleSubmit(categoryData) {
-          try {
+  useEffect(() => {
+    if (categoryData && categoryFormRef.current) {
+      categoryFormRef.current.setFieldsValue({ name: categoryData.name });
+    }
+  }, [categoryData]);
 
-              const existingCategories = await getCategoryByName(categoryData.name);
+  const categoryName = categoryData?.name ?? '';
 
-              const categoryAlreadyExists = existingCategories.some(
-                (category) =>
-                  String(category.id) !== String(id) &&
-                  category.name.trim().toLowerCase() === categoryName.toLowerCase()
-              );
+  async function handleSubmit(categoryFormData) {
+    try {
 
-              if (categoryAlreadyExists) {
-                 categoryFormRef.current.setFieldError(
-                  'name',
-                  'Já existe uma categoria com esse nome'
-                );
+      const existingCategories = await getCategoryByName(categoryFormData.name);
 
-                  toast({
-                      type: "danger",
-                      text: "Já existe uma categoria com esse nome",
-                  });
-                  return;
-              }
+      const categoryAlreadyExists = existingCategories.some(
+        (category) =>
+          String(category.id) !== String(id) &&
+          category.name.trim().toLowerCase() === categoryFormData.name.toLowerCase()
+      );
 
-              categoryFormRef.current.clearFieldError('name');
+      if (categoryAlreadyExists) {
+        categoryFormRef.current.setFieldError(
+          'name',
+          'Já existe uma categoria com esse nome'
+        );
 
-              await updateCategory(id, categoryData);
-              setCategoryName(categoryData.name);
-
-              toast({ type: 'success', text: 'Categoria atualizada com sucesso' });
-          } catch (error) {
-              console.log(error);
-              toast({ type: 'danger', text: 'Erro ao atualizar categoria' });
-          }
+        toast({
+          type: "danger",
+          text: "Já existe uma categoria com esse nome",
+        });
+        return;
       }
 
-      return {
-        isLoading,
-        categoryName,
-        categoryFormRef,
-        handleSubmit,
-      };
+      categoryFormRef.current.clearFieldError('name');
+
+      await updateCategory(id, categoryFormData);
+
+      queryClient.invalidateQueries({ queryKey: ['categories'] });
+      queryClient.invalidateQueries({ queryKey: ['category', id] });
+
+      toast({ type: 'success', text: 'Categoria atualizada com sucesso' });
+    } catch (error) {
+      console.log(error);
+      toast({ type: 'danger', text: 'Erro ao atualizar categoria' });
+    }
+  }
+
+  return {
+    isLoading,
+    categoryName,
+    categoryFormRef,
+    handleSubmit,
+  };
 }

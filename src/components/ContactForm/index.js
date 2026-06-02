@@ -89,7 +89,7 @@ const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
         <Button
           type="submit"
           disabled={!isFormValid || isSubmitting}
-          isLoading={isSubmitting}
+          $isLoading={isSubmitting}
         >
           {buttonLabel}
         </Button>

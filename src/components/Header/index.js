@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 import {
   Container,
   Left,
@@ -13,13 +14,13 @@ import {
   UserInfo,
   UserName,
   UserRole,
+  ActionButton,
 } from "./styles";
 
 export default function Header() {
-  const user = {
-    name: "Lucas Gomes",
-    role: "Administrador",
-  };
+  const { signedIn, user, signOut } = useAuth();
+  const userName = user?.name || 'Usuário';
+  const userRole = user?.role || 'Conta ativa';
 
   return (
     <Container>
@@ -33,25 +34,47 @@ export default function Header() {
 
       <Center>
         <Menu>
-          <MenuItem>
-            <NavLink to="/">Home</NavLink>
-          </MenuItem>
+          {signedIn && (
+            <>
+              <MenuItem>
+                <NavLink to="/">Home</NavLink>
+              </MenuItem>
 
-          <MenuItem>
-            <NavLink to="/categorias">Categorias</NavLink>
-          </MenuItem>
+              <MenuItem>
+                <NavLink to="/categorias">Categorias</NavLink>
+              </MenuItem>
+            </>
+          )}
+
+          {!signedIn && (
+            <>
+              <MenuItem>
+                <NavLink to="/sign-in">Entrar</NavLink>
+              </MenuItem>
+
+              <MenuItem>
+                <NavLink to="/sign-up">Cadastrar</NavLink>
+              </MenuItem>
+            </>
+          )}
         </Menu>
       </Center>
 
       <Right>
-        <UserWrapper>
-          <Avatar>{user.name.charAt(0)}</Avatar>
+        {signedIn && (
+          <UserWrapper>
+            <Avatar>{userName.charAt(0).toUpperCase()}</Avatar>
 
-          <UserInfo>
-            <UserName>{user.name}</UserName>
-            <UserRole>{user.role}</UserRole>
-          </UserInfo>
-        </UserWrapper>
+            <UserInfo>
+              <UserName>{userName}</UserName>
+              <UserRole>{userRole}</UserRole>
+            </UserInfo>
+
+            <ActionButton type="button" onClick={signOut}>
+              Sair
+            </ActionButton>
+          </UserWrapper>
+        )}
       </Right>
     </Container>
   );

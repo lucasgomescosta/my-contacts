@@ -1,17 +1,37 @@
 # MyContacts Frontend
 
-Aplicacao frontend para gerenciamento de contatos e categorias, com autenticacao, paginacao, busca e feedback visual via toasts.
+Aplicação frontend para gerenciamento de contatos e categorias, desenvolvida com React, com foco em organização de código, experiência de uso e boas práticas de desenvolvimento frontend.
+
+O projeto conta com autenticação, refresh token, paginação, busca, feedback visual via toasts e integração com API REST.
+
 
 ## Visao Geral
 
-O projeto foi construido com React e adota uma arquitetura modular baseada em:
+O **MyContacts Frontend** foi desenvolvido como uma aplicação moderna para gestão de contatos, buscando uma estrutura simples, escalável e de fácil manutenção.
+A arquitetura do projeto segue uma separação clara de responsabilidades:
 
-- `pages`: composicao de telas
-- `components`: componentes reutilizaveis e formularios
-- `hooks`: logica de estado e efeitos
+- `pages`: composicao de telas da aplicação
+- `components`: componentes reutilizaveis e formulários
+- `hooks`: regras de estado, efeitos e comportamentos reutilizáveis
 - `services`: integracao com API
-- `contexts`: autenticacao e estado global
-- `utils`: utilitarios (validacoes, formatacoes, chamadas HTTP)
+- `contexts`: gerenciamento de estados globais, como autenticação
+- `utils`: funções utilitárias, validações, formatações e configurações auxiliares
+
+## Funcionalidades
+
+- Cadastro de usuários
+- Login com autenticação
+- Refresh token para renovação de sessão
+- Persistência de sessão no `localStorage`
+- Proteção de rotas autenticadas
+- Listagem de contatos
+- Busca de contatos
+- Paginação de resultados
+- Cadastro, edição e exclusão de contatos
+- Gerenciamento de categorias
+- Feedback visual com mensagens toast
+- Integração com API REST
+- Tratamento de respostas `401 Unauthorized`
 
 ## Stack Tecnica
 
@@ -77,22 +97,25 @@ Fluxo implementado:
 
 Tokens e dados de sessao sao persistidos no `localStorage` via chaves em `src/config/storageKeys.js`.
 
-O `AuthContext`:
+O `AuthContext` é responsável por:
 
-- injeta `Authorization: Bearer <token>` nas requisicoes autenticadas
-- ignora header de autorizacao em rotas publicas de auth (`/auth/*`)
-- tenta renovar sessao em respostas `401` quando houver refresh token valido
+- armazenar os dados do usuário autenticado;
+- controlar login e logout;
+- injetar o header Authorization: Bearer <token> nas requisições autenticadas;
+- ignorar o header de autorização em rotas públicas de autenticação;
+- tentar renovar a sessão automaticamente ao receber respostas 401 Unauthorized, quando existir refresh token válido.
 
 ## Estrutura de Pastas (Resumo)
 
 ```text
 src/
-	components/
-	contexts/
-	hooks/
-	pages/
-	services/
-	utils/
+├── components/
+├── config/
+├── contexts/
+├── hooks/
+├── pages/
+├── services/
+└── utils/
 ```
 
 ## Screenshots
@@ -130,10 +153,17 @@ Substitua os arquivos pelos screenshots reais sem mudar os nomes, assim os links
 
 ## Qualidade e Padroes
 
-- Logica de formularios centralizada em hooks (`use...`)
-- UI desacoplada em componentes de formulario reutilizaveis
-- Validacoes por campo usando `useErrors`
-- Comunicacao com API isolada em `services` e `utils/apiService`
+Alguns pontos aplicados no projeto:
+
+- separação de responsabilidades por camadas;
+- componentes reutilizáveis para formulários e interface;
+- regras de estado centralizadas em hooks;
+- validações por campo utilizando useErrors;
+- comunicação com API isolada em services;
+- configuração centralizada do Axios;
+- autenticação gerenciada via contexto global;
+- tratamento de sessão expirada com refresh token;
+- código organizado para facilitar manutenção e evolução.
 
 ## Infra Local (Opcional)
 
@@ -157,6 +187,19 @@ Observacao: o frontend depende de uma API em `http://localhost:3001`.
 
 - Porta em uso:
   - altere a porta da API ou encerre o processo conflitando
+ 
+## Melhorias Futuras
+
+Algumas evoluções possíveis para o projeto:
+
+- adicionar testes unitários para hooks e componentes;
+- melhorar cobertura de testes para autenticação;
+- criar paginação mais avançada com infinite scroll;
+- adicionar loading skeletons;
+- melhorar tratamento global de erros;
+- documentar melhor a API backend utilizada;
+- adicionar pipeline de CI/CD;
+- adicionar deploy em ambiente cloud.
 
 ## Contribuicao
 

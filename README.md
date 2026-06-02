@@ -120,9 +120,6 @@ src/
 
 ## Screenshots
 
-A pasta `public/screenshots` contem imagens de exemplo para deixar o README mais visual.
-Substitua os arquivos pelos screenshots reais sem mudar os nomes, assim os links abaixo continuam funcionando.
-
 ### Home
 
 ![Home](public/screenshots/home.PNG)

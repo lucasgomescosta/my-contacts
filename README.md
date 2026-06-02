@@ -120,6 +120,10 @@ Substitua os arquivos pelos screenshots reais sem mudar os nomes, assim os links
 
 ![Novo Contato](public/screenshots/novo-contato.PNG)
 
+### Editar Contato
+
+![Editar Contato](public/screenshots/editar-contato.PNG)
+
 ## Qualidade e Padroes
 
 - Logica de formularios centralizada em hooks (`use...`)

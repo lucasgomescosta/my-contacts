@@ -124,6 +124,10 @@ Substitua os arquivos pelos screenshots reais sem mudar os nomes, assim os links
 
 ![Editar Contato](public/screenshots/editar-contato.PNG)
 
+### Excluir Contato
+
+![Excluir Contato](public/screenshots/excluir-contato.PNG)
+
 ## Qualidade e Padroes
 
 - Logica de formularios centralizada em hooks (`use...`)

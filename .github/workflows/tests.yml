@@ -21,8 +21,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          rm -rf node_modules
-          npm ci --include=optional
+          rm -rf node_modules package-lock.json
+          npm cache clean --force
+          npm install
 
       - name: Run unit/integration tests
         run: npm run test:run
@@ -42,8 +43,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          rm -rf node_modules
-          npm ci --include=optional
+          rm -rf node_modules package-lock.json
+          npm cache clean --force
+          npm install
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
